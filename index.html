@@ -1,9 +1,231 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qikai Qin, Ph.D. | Academic Profile</title>
+    <style>
+        :root {
+            --primary-color: #003366; /* Classic academic blue */
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --link-color: #005bb5;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .sidebar {
+            flex: 1;
+            min-width: 250px;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .main-content {
+            flex: 2;
+            min-width: 400px;
+        }
+        .profile-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--primary-color);
+        }
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+        .title {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .contact-info {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .contact-info li {
+            margin-bottom: 0.5rem;
+        }
+        .section-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        .publication {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .publication:last-child {
+            border-bottom: none;
+        }
+        .pub-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+        .pub-authors {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        .pub-journal {
+            font-style: italic;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+        #scholar-loading {
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
 <body>
-  <h1>YOUR NAME</h1>
-  <p>Welcome to my website!</p>
-  <img src="https://content.codecademy.com/articles/github-pages-via-web-app/happy-ice-cream.gif" />
-</body>
 
+<div class="container">
+    <div class="sidebar">
+        <img src="photo.jpg" alt="Qikai Qin" class="profile-photo" onerror="this.src='https://via.placeholder.com/180?text=Photo'">
+        <h1>Qikai Qin, Ph.D.</h1>
+        <div class="title">Researcher</div>
+        
+        <ul class="contact-info">
+            <li><strong>Email:</strong> <a href="mailto:qqin1@mgh.harvard.edu">qqin1@mgh.harvard.edu</a></li>
+            <li><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=rNgSafIAAAAJ&hl=en" target="_blank">Profile Link</a></li>
+            <li><strong>GitHub:</strong> <a href="https://github.com/QinQikai" target="_blank">QinQikai</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="section-card">
+            <h2>About</h2>
+            <p>I am a researcher specializing in Positron Emission Tomography (PET) imaging, medical imaging data analysis, and pharmacology. My work focuses on advanced imaging techniques and kinetic modeling to better understand neurochemistry and metabolic processes, often utilizing non-human primate (NHP) models.</p>
+        </div>
+
+        <div class="section-card">
+            <h2>Positions & Affiliations</h2>
+            <ul>
+                <li><strong>Researcher</strong><br>
+                Massachusetts General Hospital (MGH) / Harvard Medical School</li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <h2>Selected Publications</h2>
+            <p><em>Note: Below is a dynamically fetched feed from Google Scholar. For a complete list, please visit my <a href="https://scholar.google.com/citations?user=rNgSafIAAAAJ&hl=en" target="_blank">Google Scholar profile</a>.</em></p>
+            
+            <div id="scholar-loading">Fetching recent publications...</div>
+            <div id="publications-list">
+                </div>
+            
+            <noscript>
+                <p>Please enable JavaScript to view dynamic publications, or visit my Google Scholar directly.</p>
+            </noscript>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- Google Scholar Auto-Pull Script ---
+    // Note: Pure frontend scraping of Google Scholar is frequently blocked by CORS policies.
+    // This script uses a public CORS proxy (AllOrigins) to fetch the HTML and parse it.
+    // For a production academic site, using a GitHub Action to pre-build a JSON file is recommended.
+
+    const scholarId = 'rNgSafIAAAAJ';
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://scholar.google.com/citations?user=${scholarId}&hl=en&sortby=pubdate`)}`;
+
+    async function fetchScholarData() {
+        try {
+            const response = await fetch(proxyUrl);
+            const data = await response.json();
+            
+            // Parse the returned HTML string
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data.contents, 'text/html');
+            
+            // Extract publication rows
+            const rows = doc.querySelectorAll('.gsc_a_tr');
+            const pubList = document.getElementById('publications-list');
+            const loadingText = document.getElementById('scholar-loading');
+            
+            if (rows.length === 0) {
+                loadingText.innerText = "Could not automatically fetch publications at this time. Please check the Google Scholar link above.";
+                return;
+            }
+
+            loadingText.style.display = 'none';
+            
+            // Limit to top 5 recent publications for the homepage
+            const limit = Math.min(rows.length, 5); 
+            
+            for (let i = 0; i < limit; i++) {
+                const row = rows[i];
+                const titleNode = row.querySelector('.gsc_a_at');
+                const authorsNode = row.querySelector('.gsc_a_at + .gs_gray');
+                const journalNode = row.querySelectorAll('.gs_gray')[1]; // Second gray text is journal/venue
+                const yearNode = row.querySelector('.gsc_a_y span');
+
+                if (titleNode) {
+                    const title = titleNode.innerText;
+                    const link = "https://scholar.google.com" + titleNode.getAttribute('href');
+                    const authors = authorsNode ? authorsNode.innerText : '';
+                    const journal = journalNode ? journalNode.innerText : '';
+                    const year = yearNode ? yearNode.innerText : '';
+
+                    const pubDiv = document.createElement('div');
+                    pubDiv.className = 'publication';
+                    pubDiv.innerHTML = `
+                        <div class="pub-title"><a href="${link}" target="_blank">${title}</a></div>
+                        <div class="pub-authors">${authors}</div>
+                        <div class="pub-journal">${journal} ${year ? `(${year})` : ''}</div>
+                    `;
+                    pubList.appendChild(pubDiv);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching Scholar data:', error);
+            document.getElementById('scholar-loading').innerText = "Google Scholar rate limit reached. Please view publications via the direct link.";
+        }
+    }
+
+    // Execute the fetch on load
+    window.addEventListener('DOMContentLoaded', fetchScholarData);
+</script>
+
+</body>
 </html>
